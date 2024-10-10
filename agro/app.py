@@ -12,11 +12,10 @@ from sklearn.preprocessing import LabelEncoder
 import logging
 
 
-# Create a Flask application instance
 app = Flask(__name__)
 application=app
  
- # Load the trained irrigation model
+
 with open('irrigation_model.pkl', 'rb') as file:
     irrigation_model = pickle.load(file)
 
@@ -987,6 +986,6 @@ def commodity_profile():
         
 import os
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))  # Use the port provided by the environment
+    port = int(os.environ.get('PORT', 5000))  
     app.run(host='0.0.0.0', port=port)
 
