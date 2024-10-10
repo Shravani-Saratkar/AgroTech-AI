@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 import numpy as np
 import pandas as pd
-from flask_cors import CORS # CORS for handling Cross-Origin Resource Sharing
+from flask_cors import CORS   #CORS for handling Cross-Origin Resource Sharing
 import pickle 
 from datetime import datetime
 import random
@@ -35,8 +35,6 @@ fertilizer_model = pickle.load(open('fertilizer.pkl', 'rb'))
 classifier_model = pickle.load(open('classifier.pkl', 'rb'))
 soil_quality_model=pickle.load(open('soil_quality.pkl' ,'rb'))
 irrigation_model = pickle.load(open('irrigation_model.pkl', 'rb'))
-
- 
 
 
 
@@ -987,7 +985,8 @@ def commodity_profile():
     })
     
         
-
+import os
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    port = int(os.environ.get('PORT', 5000))  # Use the port provided by the environment
+    app.run(host='0.0.0.0', port=port)
 
