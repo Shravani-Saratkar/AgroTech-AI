@@ -7,6 +7,7 @@ from sklearn.multioutput import MultiOutputRegressor
 from sklearn.preprocessing import StandardScaler
 from sklearn import metrics
 
+
 # Step 1: Function to Calculate Irrigation Requirement
 def calculate_irrigation_requirement(soil_type, crop_type, avg_temp, moisture_level):
     base_req = 200
