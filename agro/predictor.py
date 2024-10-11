@@ -1,5 +1,10 @@
+import os
 import pickle
-with open('irrigation_model.pkl', 'rb') as file:
+
+parent_dir = os.path.dirname(os.path.dirname(__file__))
+model_path = os.path.join(parent_dir, 'irrigation_model.pkl')
+
+with open(model_path, 'rb') as file:
     linear_model = pickle.load(file)
 
 def predict_irrigation(input_data):

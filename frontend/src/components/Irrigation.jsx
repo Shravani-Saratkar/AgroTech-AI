@@ -76,7 +76,7 @@ const IrrigationSystem = () => {
                   "Content-Type": "application/json",
               },
               method: "POST",
-              mode: 'cors',
+              
               body: JSON.stringify(formDataForApi),
           });
 

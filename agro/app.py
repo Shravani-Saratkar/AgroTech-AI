@@ -39,8 +39,8 @@ crop_model = pickle.load(open(os.path.join(current_dir, 'crop_recommendation.pkl
 fertilizer_model = pickle.load(open(os.path.join(current_dir, 'fertilizer.pkl'), 'rb'))
 classifier_model = pickle.load(open(os.path.join(current_dir, 'classifier.pkl'), 'rb'))
 soil_quality_model = pickle.load(open(os.path.join(current_dir, 'soil_quality.pkl'), 'rb'))
-irrigation_model = pickle.load(open(os.path.join(current_dir, 'irrigation_model.pkl'), 'rb'))
-
+parent_dir = os.path.dirname(os.path.dirname(__file__))
+irrigation_model = pickle.load(open(os.path.join(parent_dir, 'irrigation_model.pkl'), 'rb'))
 
 
 # Define a route for handling HTTP GET requests to the root URL
