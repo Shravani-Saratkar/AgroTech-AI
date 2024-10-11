@@ -30,7 +30,7 @@ with open(label_encoder_path, 'rb') as file:
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Enable CORS for all routes, allowing requests from any origin
-CORS(app,resources={r"/*":{"origins":"*"}})
+CORS(app, resources={r"/irrigation": {"origins": "*", "methods": ["POST"]}})
 
 
 crop_model = pickle.load(open(os.path.join(current_dir, 'crop_recommendation.pkl'), 'rb'))
