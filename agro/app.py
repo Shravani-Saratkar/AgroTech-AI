@@ -10,17 +10,21 @@ from flask import Blueprint
 from math import ceil
 from sklearn.preprocessing import LabelEncoder
 import logging
-
+import os
 
 app = Flask(__name__)
 application=app
  
+current_dir = os.path.dirname(os.path.abspath(__file__))
+irrigation_model_path = os.path.join(current_dir, 'irrigation_model.pkl')
+label_encoder_path = os.path.join(current_dir, '..', 'disease-prediction-api', 'label_encoder.pkl')
 
-with open('irrigation_model.pkl', 'rb') as file:
+
+with open(irrigation_model_path, 'rb') as file:
     irrigation_model = pickle.load(file)
 
-# Load the label encoder
-with open('label_encoder.pkl', 'rb') as file:
+
+with open(label_encoder_path, 'rb') as file:
     label_encoder = pickle.load(file)
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -29,11 +33,11 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 CORS(app,resources={r"/*":{"origins":"*"}})
 
 
-crop_model = pickle.load(open('crop_recommendation.pkl', 'rb'))
-fertilizer_model = pickle.load(open('fertilizer.pkl', 'rb'))
-classifier_model = pickle.load(open('classifier.pkl', 'rb'))
-soil_quality_model=pickle.load(open('soil_quality.pkl' ,'rb'))
-irrigation_model = pickle.load(open('irrigation_model.pkl', 'rb'))
+crop_model = pickle.load(open(os.path.join(current_dir, 'crop_recommendation.pkl'), 'rb'))
+fertilizer_model = pickle.load(open(os.path.join(current_dir, 'fertilizer.pkl'), 'rb'))
+classifier_model = pickle.load(open(os.path.join(current_dir, 'classifier.pkl'), 'rb'))
+soil_quality_model = pickle.load(open(os.path.join(current_dir, 'soil_quality.pkl'), 'rb'))
+irrigation_model = pickle.load(open(os.path.join(current_dir, 'irrigation_model.pkl'), 'rb'))
 
 
 
