@@ -9,15 +9,6 @@ import img5 from "../assets/img14.png";
 
 const IrrigationSystem = () => {
     const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setLoading(false);
-        }, 3000);
-
-        return () => clearTimeout(timer);
-    }, []);
-
     const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState({
         Soil_Type: '',
@@ -30,11 +21,14 @@ const IrrigationSystem = () => {
     const [showSpan, setShowSpan] = useState(false);
 
     useEffect(() => {
-      const timer = setTimeout(() => {
-          setLoading(false);
-      }, 3000);
-      return () => clearTimeout(timer);
-  }, []);
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 3000);
+
+        return () => clearTimeout(timer);
+    }, []);
+
+    
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -46,10 +40,34 @@ const IrrigationSystem = () => {
 
     const handlePredictClick = async (e) => {
       e.preventDefault();
-      const url = `${process.env.REACT_APP_API_URL}/irrigation`;
-      setIsLoading(true); // Set loading state to true
-      const jsonData = JSON.stringify(formData);
-      console.log("Sending data:", jsonData); 
+
+      if (!formData.Soil_Type || !formData.Crop_Type || !formData.Average_Temperature || !formData.Geographical_Location || !formData.Moisture_Level) {
+        alert('Please fill out all fields');
+        return;
+    }
+    let soil_type = formData.Soil_Type;
+    let crop_type = formData.Crop_Type;
+    let avg_temperature = parseInt(formData.Average_Temperature);
+    let geographical_location = formData.Geographical_Location;
+    let moisture_Level = parseInt(formData.Moisture_Level);
+
+   
+     
+
+    const formDataForApi = {
+        soil_type: formData.Soil_Type.toLowerCase().replace("_", ""),
+        crop_type: formData.Crop_Type.toLowerCase().replace("_", ""),
+        avg_temperature: Number(formData.Average_Temperature),
+        geographical_location: formData.Geographical_Location,
+        moisture_level: Number(formData.Moisture_Level),
+    };
+     
+     
+
+
+      const url  = "https://irrigation-model-dwm8.onrender.com/predict_irrigation";
+      setIsLoading(true); 
+      console.log("Sending data:", formDataForApi); 
 
       try {
           const response = await fetch(url, {
@@ -58,7 +76,8 @@ const IrrigationSystem = () => {
                   "Content-Type": "application/json",
               },
               method: "POST",
-              body: jsonData,
+              mode: 'no-cors',
+              body: formDataForApi,
           });
 
           if (!response.ok) {
@@ -76,6 +95,9 @@ const IrrigationSystem = () => {
     } finally {
         setIsLoading(false); // Set loading state to false in all cases
     }
+    
+    
+    
 };
 
     return (

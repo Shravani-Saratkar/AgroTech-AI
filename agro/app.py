@@ -11,6 +11,7 @@ from math import ceil
 from sklearn.preprocessing import LabelEncoder
 import logging
 import os
+from predictor import predict_irrigation
 
 app = Flask(__name__)
 application=app
@@ -83,42 +84,34 @@ label_encoder_crop = LabelEncoder()
 label_encoder_soil.fit(soil_types)
 label_encoder_crop.fit(crop_types)
     
-@app.route('/irrigation', methods=['POST'])
-def irrigation():
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
+@app.route('/predict_irrigation', methods=['POST'])
+def predict_irrigation_route():
     try:
         data = request.get_json()
-        print("Received data:", data)  # Debug log for received data
-
-        # Check if all required fields are present
         required_fields = ['soil_type', 'crop_type', 'avg_temperature', 'geographical_location', 'moisture_level']
+        
+        # Check if all required fields are present
         for field in required_fields:
             if field not in data:
                 return jsonify({'error': f'Missing field: {field}'}), 400
 
         # Extract input data from the request
-        soil_type = data['soil_type']                    # Expected to be one of the predefined soil types
-        crop_type = data['crop_type']                    # Expected to be one of the predefined crop types
-        avg_temperature = data['avg_temperature']        # Numeric value between 15 and 40
-        geographical_location = data['geographical_location']  # City or state name
-        moisture_level = data['moisture_level']          # Numeric value between 10 and 100
+        soil_type = data['soil_type']
+        crop_type = data['crop_type']
+        avg_temperature = data['avg_temperature']
+        geographical_location = data['geographical_location']
+        moisture_level = data['moisture_level']
 
         # Prepare the input data for prediction
-        # If you are using Label Encoding for categorical variables, make sure to encode them here
         encoded_soil_type = label_encoder_soil.transform([soil_type])[0]
         encoded_crop_type = label_encoder_crop.transform([crop_type])[0]
-
-        # Construct input data for the model
         input_data = [[encoded_soil_type, encoded_crop_type, avg_temperature, moisture_level]]
 
         # Get the irrigation recommendation from the model
         irrigation_recommendation = irrigation_model.predict(input_data)
 
         # Return the result as a JSON response
-        return jsonify({
-            'irrigation_recommendation': irrigation_recommendation[0],  # Ensure this is indexed correctly
-        })
+        return jsonify({'irrigation_amount': irrigation_recommendation[0], 'irrigation_type': irrigation_recommendation[1]})
 
     except KeyError as e:
         # Handle missing data fields
@@ -127,8 +120,6 @@ def irrigation():
     except Exception as e:
         # Handle any other errors
         return jsonify({'error': str(e)}), 500
-
-
 
     
 @app.route('/soil_quality_predict', methods=['POST'])
