@@ -32,7 +32,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 
 CORS(app, resources={
-    r"/irrigation_predict": {"origins": "*", "methods": ["POST"]}
+    r"/predict_irrigation": {"origins": "*", "methods": ["POST"]}
 })
 
 crop_model = pickle.load(open(os.path.join(current_dir, 'crop_recommendation.pkl'), 'rb'))
