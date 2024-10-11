@@ -76,8 +76,8 @@ const IrrigationSystem = () => {
                   "Content-Type": "application/json",
               },
               method: "POST",
-              mode: 'no-cors',
-              body: formDataForApi,
+              mode: 'cors',
+              body: JSON.stringify(formDataForApi),
           });
 
           if (!response.ok) {
@@ -93,7 +93,7 @@ const IrrigationSystem = () => {
         setResult("Error: Unable to predict irrigation");
         setShowSpan(true);
     } finally {
-        setIsLoading(false); // Set loading state to false in all cases
+        setIsLoading(false); 
     }
     
     
