@@ -18,7 +18,7 @@ const IrrigationSystem = () => {
         Moisture_Level: ''
     });
     const [result, setResult] = useState("");
-    const [showSpan, setShowSpan] = useState(false);
+    const [showResult, setShowResult] = useState(false); 
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -27,8 +27,6 @@ const IrrigationSystem = () => {
 
         return () => clearTimeout(timer);
     }, []);
-
-    
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -39,72 +37,61 @@ const IrrigationSystem = () => {
     };
 
     const handlePredictClick = async (e) => {
-      e.preventDefault();
+        e.preventDefault();
 
-      if (!formData.Soil_Type || !formData.Crop_Type || !formData.Average_Temperature || !formData.Geographical_Location || !formData.Moisture_Level) {
-        alert('Please fill out all fields');
-        return;
-    }
-    let soil_type = formData.Soil_Type;
-    let crop_type = formData.Crop_Type;
-    let avg_temperature = parseInt(formData.Average_Temperature);
-    let geographical_location = formData.Geographical_Location;
-    let moisture_Level = parseInt(formData.Moisture_Level);
-
-   
-     
-
-    const formDataForApi = {
-        soil_type: formData.Soil_Type.toLowerCase().replace("_", ""),
-        crop_type: formData.Crop_Type.toLowerCase().replace("_", ""),
-        avg_temperature: Number(formData.Average_Temperature),
-        geographical_location: formData.Geographical_Location,
-        moisture_level: Number(formData.Moisture_Level),
-    };
-     
-     
-
-
-      const url  = "https://irrigation-model-dwm8.onrender.com/predict_irrigation";
-      setIsLoading(true); 
-      console.log("Sending data:", formDataForApi); 
-
-      try {
-          const response = await fetch(url, {
-              headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-              },
-              method: "POST",
-              
-              body: JSON.stringify(formDataForApi),
-          });
-
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+        if (!formData.Soil_Type || !formData.Crop_Type || !formData.Average_Temperature || !formData.Geographical_Location || !formData.Moisture_Level) {
+            alert('Please fill out all fields');
+            return;
         }
 
-        const responseData = await response.json();
-        console.log("Received response:", responseData);
-        setResult(responseData.Prediction);
-        setShowSpan(true);
-    } catch (error) {
-        console.error("Error:", error);
-        setResult("Error: Unable to predict irrigation");
-        setShowSpan(true);
+        const formDataForApi = {
+            soil_type: formData.Soil_Type.toLowerCase().replace("_", ""),
+            crop_type: formData.Crop_Type.toLowerCase().replace("_", ""),
+            avg_temperature: Number(formData.Average_Temperature),
+            geographical_location: formData.Geographical_Location,
+            moisture_level: Number(formData.Moisture_Level),
+        };
+
+        const url = "https://irrigation-model-dwm8.onrender.com/predict_irrigation";
+        setIsLoading(true);
+        console.log("Sending data:", formDataForApi);
+
+        try {
+            const response = await fetch(url, {
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+                method: "POST",
+                mode: "cors",
+                body: JSON.stringify(formDataForApi),
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const responseData = await response.json();
+            console.log("Received response:", responseData);
+            const irrigationAmount = responseData.irrigation_amount;
+            const irrigationType = responseData.irrigation_type;
+            setResult(`Irrigation amount: ${irrigationAmount} units, Type: ${irrigationType}`);
+            ssetShowResult(true);
+    }     catch (error) {
+            console.error("Error:", error);
+            setResult("Error: Unable to predict irrigation");
+            setShowResult(true);
     } finally {
-        setIsLoading(false); 
-    }
-    
-    
-    
-};
+    setIsLoading(false); 
+}
+    };
 
     return (
         <>
-            {loading ? <Spinner /> : <div className="max-w-full mx-auto pb-10 pt-5 px-4 sm:px-6 lg:px-8 mt-16  " style={{ backgroundImage: `url(${bgHero})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-                <h1 className="text-2xl font-bold text-green-500  text-center">Irrigation System</h1>
-                <div className="flex flex-col sm:flex-row items-center justify-between mb-8  ">
+            {loading ? <Spinner /> : (
+                <div className="max-w-full mx-auto pb-10 pt-5 px-4 sm:px-6 lg:px-8 mt-16" style={{ backgroundImage: `url(${bgHero})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                    <h1 className="text-2xl font-bold text-green-500 text-center">Irrigation System</h1>
+                    <div className="flex flex-col sm:flex-row items-center justify-between mb-8  ">
                     <div className="sm:w-2/3 p-4 items-center">
                         <p className="bg-gradient-to-r from-green-600 via-green-500 to-green-400 inline-block text-transparent bg-clip-text text-2xl font-bold py-1">
                             About Irrigation System
@@ -135,10 +122,10 @@ const IrrigationSystem = () => {
                         </div>
                     </div>
                 </div>
-                <div className="max-w-2xl mx-auto mt-10 text-center p-5 border-2  text-green-900 border-green-500 shadow-2xl shadow-green-200 rounded-md" style={{ backgroundImage: `url(${bgHero})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-                    <h1 className="text-2xl font-bold text-green-500 mb-4 text-center">Irrigation System</h1>
+                    <div className="max-w-2xl mx-auto mt-10 text-center p-5 border-2 text-green-900 border-green-500 shadow-2xl shadow-green-200 rounded-md" style={{ backgroundImage: `url(${bgHero})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                        <h1 className="text-2xl font-bold text-green-500 mb-4 text-center">Irrigation System</h1>
 
-                    <form method="post" acceptCharset="utf-8" name="Modelform" className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <form method="post" acceptCharset="utf-8" name="Modelform" className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="flex justify-between items-center">
                             <label className="font-semibold mr-2">Soil Type</label>
                             <select
@@ -218,30 +205,29 @@ const IrrigationSystem = () => {
                                 placeholder="Enter moisture level"
                             />
                         </div>
-                        <div className="col-span-1 sm:col-span-2">
-                            <button
-                                className="w-full px-3 py-2 bg-blue-500 text-white rounded disabled:bg-blue-300"
-                                disabled={isLoading}data
-                                onClick={!isLoading ? handlePredictClick : null}
-                            >
-                                {isLoading ? "Predicting..." : "Predict Irrigation"}
-                            </ button>
-                        </div>
-                    </form>
-                    {showSpan && (
-                        <div className="mt-4">
-                            <h4 className="text-lg font-semibold">
-                                {result && result.length ? (
-                                    <p>The Predicted Irrigation is <br></br><span className="text-xl text-sky-600">{result}</span> </p>
-                                ) : (
-                                    <p>Please fill out each field in the form completely</p>
-                                )}
-                            </h4>
-                        </div>
-                    )}
-                </div>
-
-                <div className="">
+                            <div className="col-span-1 sm:col-span-2">
+                                <button
+                                    className="w-full px-3 py-2 bg-blue-500 text-white rounded disabled:bg-blue-300"
+                                    disabled={isLoading}
+                                    onClick={!isLoading ? handlePredictClick : null}
+                                >
+                                    {isLoading ? "Predicting..." : "Predict Irrigation"}
+                                </button>
+                            </div>
+                        </form>
+                        {showResult && (
+                            <div className="mt-4">
+                                <h4 className="text-lg font-semibold">
+                                    {result && result.length ? (
+                                        <p>The Predicted Irrigation is <br /><span className="text-xl text-sky-600">{result}</span></p>
+                                    ) : (
+                                        <p>Please fill out each field in the form completely</p>
+                                    )}
+                                </h4>
+                            </div>
+                        )}
+                    </div>
+                    <div className="">
                     <div className="flex flex-col sm:flex-row items-center mt-20 justify-between  ">
                         <div className="sm:w-1/2 flex flex-wrap px-10  rounded-md justify-center ">
                             <img src={img4} alt="Crop 1" style={{ borderRadius: '100%' }} className="w-4/5 h px-2 " />
@@ -302,10 +288,10 @@ const IrrigationSystem = () => {
                         </div>
                     </div>
                 </div>
-                </div>}
+
+                </div>
+            )}
         </>
-
-
     );
 };
 

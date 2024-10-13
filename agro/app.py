@@ -11,13 +11,13 @@ from math import ceil
 from sklearn.preprocessing import LabelEncoder
 import logging
 import os
-from .predictor import predict_irrigation
+from predictor import predict_irrigation
 
 app = Flask(__name__)
 application=app
  
 current_dir = os.path.dirname(os.path.abspath(__file__))
-irrigation_model_path = os.path.join(current_dir, 'irrigation_model.pkl')
+irrigation_model_path = os.path.join(current_dir, '..', 'irrigation_model.pkl')
 label_encoder_path = os.path.join(current_dir, '..', 'disease-prediction-api', 'label_encoder.pkl')
 
 
@@ -106,7 +106,8 @@ def predict_irrigation_route():
         # Prepare the input data for prediction
         encoded_soil_type = label_encoder_soil.transform([soil_type])[0]
         encoded_crop_type = label_encoder_crop.transform([crop_type])[0]
-        input_data = [[encoded_soil_type, encoded_crop_type, avg_temperature, moisture_level]]
+    
+        input_data = [[encoded_soil_type, encoded_crop_type, avg_temperature, moisture_level,geographical_location]]
 
         # Get the irrigation recommendation from the model
         irrigation_recommendation = irrigation_model.predict(input_data)
