@@ -112,9 +112,16 @@ def predict_irrigation_route():
         # Get the irrigation recommendation from the model
         irrigation_recommendation = irrigation_model.predict(input_data)
 
-        # Return the result as a JSON response
-        return jsonify({'irrigation_amount': irrigation_recommendation[0], 'irrigation_type': irrigation_recommendation[1]})
+        predicted_irrigation_amount = irrigation_recommendation[:, 0]
 
+        # Extract predicted irrigation type (assuming it's determined by the highest probability in the remaining columns)
+        predicted_irrigation_type = np.argmax(irrigation_recommendation[:, 1:], axis=1)
+
+        # Convert to list format to make it JSON serializable
+        return jsonify({
+            'irrigation_amount': predicted_irrigation_amount.tolist(),
+            'irrigation_type': predicted_irrigation_type.tolist()
+        })
     except KeyError as e:
         # Handle missing data fields
         return jsonify({'error': f'Missing field: {e}'}), 400
