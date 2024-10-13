@@ -11,7 +11,7 @@ from math import ceil
 from sklearn.preprocessing import LabelEncoder
 import logging
 import os
-from predictor import predict_irrigation
+from .predictor import predict_irrigation
 
 app = Flask(__name__)
 application=app
