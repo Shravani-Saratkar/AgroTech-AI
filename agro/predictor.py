@@ -4,7 +4,7 @@ import pickle
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
 from notebooks.irrigation import linear_model
-file_path = 'simulated_irrigation_data.csv'
+file_path = os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')), 'simulated_irrigation_data.csv')
 from sklearn.preprocessing import StandardScaler
 import numpy as np
 
