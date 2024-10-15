@@ -120,7 +120,8 @@ def predict_irrigation_route():
                                   'Subsurface Drip Irrigation']
         predicted_irrigation_type_label = irrigation_type_labels[predicted_irrigation_type_index]
 
-        
+        logging.info(f"Predicted Irrigation Amount: {predicted_irrigation_amount}")
+        logging.info(f"Predicted Irrigation Type: {predicted_irrigation_type_label}")
 
         # Convert to list format to make it JSON serializable
         return jsonify({
