@@ -109,18 +109,23 @@ def predict_irrigation_route():
     
         input_data = [[encoded_soil_type, encoded_crop_type, avg_temperature, moisture_level,geographical_location]]
 
-        # Get the irrigation recommendation from the model
         irrigation_recommendation = irrigation_model.predict(input_data)
 
-        predicted_irrigation_amount = irrigation_recommendation[:, 0]
+        predicted_irrigation_amount = irrigation_recommendation[:, 0][0]  
+        predicted_irrigation_type_index = np.argmax(irrigation_recommendation[:, 1:], axis=1)[0]  
 
-        # Extract predicted irrigation type (assuming it's determined by the highest probability in the remaining columns)
-        predicted_irrigation_type = np.argmax(irrigation_recommendation[:, 1:], axis=1)
+         # Map the predicted index back to the actual irrigation type
+        irrigation_type_labels = ['Surface Irrigation', 'Pivot Irrigation', 
+                                  'Sprinkler Irrigation', 'Drip Irrigation', 
+                                  'Subsurface Drip Irrigation']
+        predicted_irrigation_type_label = irrigation_type_labels[predicted_irrigation_type_index]
+
+        
 
         # Convert to list format to make it JSON serializable
         return jsonify({
-            'irrigation_amount': predicted_irrigation_amount.tolist(),
-            'irrigation_type': predicted_irrigation_type.tolist()
+            'irrigation_amount': predicted_irrigation_amount,
+            'irrigation_type': predicted_irrigation_type_label,
         })
     except KeyError as e:
         # Handle missing data fields

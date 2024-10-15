@@ -48,11 +48,11 @@ const IrrigationSystem = () => {
             soil_type: formData.Soil_Type.toLowerCase().replace("_", ""),
             crop_type: formData.Crop_Type.toLowerCase().replace("_", ""),
             avg_temperature: Number(formData.Average_Temperature),
-            geographical_location: formData.Geographical_Location,
+            geographical_location: formData.Geographical_Location.toLowerCase().replace(" ", "_"),
             moisture_level: Number(formData.Moisture_Level),
         };
 
-        const url = "https://irrigation-model-dwm8.onrender.com/predict_irrigation";
+        const url = "https://agrotech-ai-rfao.onrender.com/predict_irrigation";
         setIsLoading(true);
         console.log("Sending data:", formDataForApi);
 
