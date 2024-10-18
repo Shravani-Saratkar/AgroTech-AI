@@ -14,7 +14,7 @@ def retrieve_simulated_data(file_path):
 
 # Retrieve the simulated data from the CSV file
 df_retrieved = retrieve_simulated_data(file_path)
-print(df_retrieved.head())
+#print(df_retrieved.head())
 
 # Prepare the input data for the model
 def prepare_input_data(df):
@@ -40,5 +40,11 @@ def predict_irrigation(input_data):
     return predicted_irrigation_amount, predicted_irrigation_type
 
 predicted_irrigation_amount, predicted_irrigation_type = predict_irrigation(input_data)
-print("Predicted Irrigation Amount:", predicted_irrigation_amount)
-print("Predicted Irrigation Type:", predicted_irrigation_type)
+irrigation_type_labels = ['Surface Irrigation', 'Pivot Irrigation', 
+                                  'Sprinkler Irrigation', 'Drip Irrigation', 
+                                  'Subsurface Drip Irrigation']
+
+predicted_irrigation_type_label = irrigation_type_labels[predicted_irrigation_type[0]]
+
+print(f"Irrigation Requirement Prediction: {predicted_irrigation_amount[0]:.1f} mm")
+print(f"Irrigation Type Prediction: {predicted_irrigation_type_label}")

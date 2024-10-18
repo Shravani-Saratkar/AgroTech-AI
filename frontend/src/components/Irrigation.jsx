@@ -73,10 +73,10 @@ const IrrigationSystem = () => {
 
             const responseData = await response.json();
             console.log("Received response:", responseData);
-            const irrigationAmount = responseData.irrigation_amount;
-            const irrigationType = responseData.irrigation_type;
+            const irrigationAmount = responseData['Irrigation Requirement Prediction'];
+            const irrigationType = responseData['Irrigation Type Prediction'];
             setResult(`Irrigation amount: ${irrigationAmount} units, Type: ${irrigationType}`);
-            ssetShowResult(true);
+            setShowResult(true);
     }     catch (error) {
             console.error("Error:", error);
             setResult("Error: Unable to predict irrigation");

@@ -109,19 +109,14 @@ def predict_irrigation_route():
     
         input_data = [[encoded_soil_type, encoded_crop_type, avg_temperature, moisture_level,geographical_location]]
 
-        irrigation_recommendation = irrigation_model.predict(input_data)
+        predicted_irrigation_amount, predicted_irrigation_type = predict_irrigation(irrigation_model, input_data)
 
-        predicted_irrigation_amount = irrigation_recommendation[:, 0][0]  
-        predicted_irrigation_type_index = np.argmax(irrigation_recommendation[:, 1:], axis=1)[0]  
+        response = {
+            "Irrigation Requirement Prediction": f"{predicted_irrigation_amount:.1f} mm",
+            "Irrigation Type Prediction": predicted_irrigation_type
+        }
 
-         # Map the predicted index back to the actual irrigation type
-        irrigation_type_labels = ['Surface Irrigation', 'Pivot Irrigation', 
-                                  'Sprinkler Irrigation', 'Drip Irrigation', 
-                                  'Subsurface Drip Irrigation']
-        predicted_irrigation_type_label = irrigation_type_labels[predicted_irrigation_type_index]
-
-        logging.info(f"Predicted Irrigation Amount: {predicted_irrigation_amount}")
-        logging.info(f"Predicted Irrigation Type: {predicted_irrigation_type_label}")
+        return jsonify(response)
 
         # Convert to list format to make it JSON serializable
         return jsonify({

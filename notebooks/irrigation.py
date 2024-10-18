@@ -79,13 +79,13 @@ linear_model.fit(X_train, y_train)
 y_pred = linear_model.predict(X_test)
 
 # Evaluate the irrigation requirement prediction
-print('Irrigation Requirement R-squared score:', metrics.r2_score(y_test[:, 0], y_pred[:, 0]))
+#print('Irrigation Requirement R-squared score:', metrics.r2_score(y_test[:, 0], y_pred[:, 0]))
 
 # Save the model
 with open('irrigation_model.pkl', 'wb') as file:
     pickle.dump(linear_model, file)
 
-print("Model saved to 'irrigation_model.pkl'.")
+# print("Model saved to 'irrigation_model.pkl'.")
 
 # Step 8: Make a Prediction for a New Input
 # Ensure that sample input has all 28 features (same as the training features after encoding)
@@ -100,7 +100,7 @@ predicted_irrigation_type = np.argmax(sample_prediction[0, 1:])
 irrigation_type_labels = pd.get_dummies(df_simulated['Irrigation Type']).columns
 predicted_irrigation_type_label = irrigation_type_labels[predicted_irrigation_type]
 
-print(f'Irrigation Requirement Prediction: {predicted_irrigation_amount} mm')
-print(f'Irrigation Type Prediction: {predicted_irrigation_type_label}')
+# print(f'Irrigation Requirement Prediction: {predicted_irrigation_amount} mm')
+# print(f'Irrigation Type Prediction: {predicted_irrigation_type_label}')
 
 
